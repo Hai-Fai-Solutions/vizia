@@ -362,7 +362,11 @@ impl View for ArcTrack {
         paint.set_stroke_cap(vg::PaintCap::Round);
         paint.set_style(vg::PaintStyle::Stroke);
         // canvas.draw_path(&path, &paint);
-        canvas.draw_arc(oval, start, end - start, true, &paint);
+        // `useCenter` must be false: with a stroked paint it adds the two radii from the arc's
+        // centre to its ends to the stroked path, so the background track was drawn as a wedge
+        // outline and its edges showed as a "V" across the middle of the knob. The track is an
+        // arc, not a sector.
+        canvas.draw_arc(oval, start, end - start, false, &paint);
 
         // Draw the active arc
         let mut path = vg::PathBuilder::new();
